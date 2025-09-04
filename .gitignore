@@ -1,0 +1,36 @@
+# Ignore node dependencies
+node_modules/
+
+# Ignore build output
+.next/
+build/
+dist/
+
+# Ignore log files
+*.log
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore coverage reports
+coverage/
+
+# Ignore frontend static files
+frontend/public/video.mp4
+
+# Ignore backend static files
+backend/public/
+
+# Ignore VS Code settings
+.vscode/
