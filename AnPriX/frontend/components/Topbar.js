@@ -10,10 +10,13 @@ import {
 } from "@mui/icons-material";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function Topbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreBtnRef = useRef(null);
+  const morePopupRef = useRef(null);
   const items = [
     { name: "Home", icon: <Home fontSize="small" />, path: "/" },
     {
@@ -37,8 +40,40 @@ export default function Topbar() {
       icon: <Celebration fontSize="small" />,
       path: "/festival",
     },
-    { name: "More", icon: <MoreHoriz fontSize="small" />, path: "/more" },
   ];
+
+  // More popup menu items (example, you can adjust as needed)
+  const moreMenu = [
+    { name: "News", icon: <Home fontSize="small" />, path: "/news" },
+    {
+      name: "Gallery",
+      icon: <EmojiEvents fontSize="small" />,
+      path: "/gallery",
+    },
+    { name: "About", icon: <SportsEsports fontSize="small" />, path: "/about" },
+    {
+      name: "Partners",
+      icon: <Leaderboard fontSize="small" />,
+      path: "/partners",
+    },
+  ];
+
+  // Close popup on outside click
+  useEffect(() => {
+    if (!moreOpen) return;
+    function handleClick(e) {
+      if (
+        morePopupRef.current &&
+        !morePopupRef.current.contains(e.target) &&
+        moreBtnRef.current &&
+        !moreBtnRef.current.contains(e.target)
+      ) {
+        setMoreOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [moreOpen]);
 
   return (
     <header className="fixed top-0 w-full flex items-center justify-between px-4 md:px-8 py-3 md:py-4 bg-black/80 backdrop-blur-lg border-b border-purple-500 z-50">
@@ -105,6 +140,43 @@ export default function Topbar() {
             <span>{item.name}</span>
           </Link>
         ))}
+        {/* More menu button */}
+        <div className="relative w-full md:w-auto">
+          <button
+            ref={moreBtnRef}
+            className="flex items-center gap-2 text-gray-300 hover:text-purple-300 transition text-lg md:text-sm font-medium w-full md:w-auto px-2 py-1"
+            onClick={(e) => {
+              e.preventDefault();
+              setMoreOpen((v) => !v);
+            }}
+            aria-haspopup="true"
+            aria-expanded={moreOpen}
+            type="button"
+          >
+            <MoreHoriz fontSize="small" />
+            <span>More</span>
+          </button>
+          {/* Popup dropdown */}
+          {moreOpen && (
+            <div
+              ref={morePopupRef}
+              className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in"
+              style={{ minWidth: "180px" }}
+            >
+              {moreMenu.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.path}
+                  className="flex items-center gap-2 px-4 py-2 text-gray-800 hover:bg-purple-100 transition w-full"
+                  onClick={() => setMoreOpen(false)}
+                >
+                  {item.icon}
+                  <span>{item.name}</span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       </nav>
 
       {/* Right: Login only (language selection removed) */}
