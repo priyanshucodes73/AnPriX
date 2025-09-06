@@ -83,16 +83,22 @@ export default function Topbar() {
         </svg>
       </button>
 
-      {/* Middle: Nav */}
+      {/* Nav: Dropdown on mobile (top-left, full width, left-aligned), horizontal on desktop */}
       <nav
-        className={`fixed top-0 left-0 w-full h-full bg-black/95 flex flex-col items-center justify-center gap-8 transition-all duration-300 z-40 md:static md:w-auto md:h-auto md:bg-transparent md:flex-row md:items-center md:justify-start md:gap-8 md:transition-none
-      ${menuOpen ? "block" : "hidden"} md:flex`}
+        className={`md:static md:w-auto md:h-auto md:bg-transparent md:flex-row md:items-center md:justify-start md:gap-8 md:transition-none
+        ${
+          menuOpen
+            ? "fixed left-0 top-[64px] w-full bg-black/95 flex flex-col items-start px-6 py-6 gap-6 z-40"
+            : "hidden"
+        } md:flex`}
+        style={{ minHeight: menuOpen ? "calc(100vh - 64px)" : undefined }}
       >
         {items.map((item) => (
           <Link
             key={item.name}
             href={item.path}
-            className="flex items-center gap-2 text-gray-300 hover:text-purple-300 transition text-lg md:text-sm font-medium"
+            className="flex items-center gap-2 text-gray-300 hover:text-purple-300 transition text-lg md:text-sm font-medium w-full md:w-auto"
+            style={{ justifyContent: "flex-start" }}
             onClick={() => setMenuOpen(false)}
           >
             {item.icon}
