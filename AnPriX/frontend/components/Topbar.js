@@ -56,6 +56,11 @@ export default function Topbar() {
       icon: <Leaderboard fontSize="small" />,
       path: "/partners",
     },
+    {
+      name: "History of all games",
+      icon: <Event fontSize="small" />,
+      path: "/history",
+    },
   ];
 
   // Close popup on outside click
