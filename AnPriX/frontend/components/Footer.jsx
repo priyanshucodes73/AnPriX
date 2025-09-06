@@ -1,3 +1,5 @@
+"use client";
+
 import {
   FaFacebookF,
   FaInstagram,
@@ -7,6 +9,86 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 import Link from "next/link";
+
+import { useState, useRef, useEffect } from "react";
+
+// LanguageDropup component for dropup style language selection
+function LanguageDropup() {
+  const [open, setOpen] = useState(false);
+  const dropupRef = useRef(null);
+  const languages = [
+    { code: "en", label: "English" },
+    { code: "hi", label: "Hindi" },
+    { code: "es", label: "Spanish" },
+    { code: "fr", label: "French" },
+    { code: "ur", label: "Urdu" },
+    { code: "ar", label: "Arabic" },
+    { code: "zh", label: "Chinese" },
+    { code: "ja", label: "Japanese" },
+    { code: "ru", label: "Russian" },
+    { code: "pt", label: "Portuguese" },
+  ];
+  const [selected, setSelected] = useState(languages[0]);
+
+  // Close dropup on outside click
+  useEffect(() => {
+    function handleClick(e) {
+      if (dropupRef.current && !dropupRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+    if (open) document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  return (
+    <div className="relative" ref={dropupRef}>
+      <button
+        className="flex items-center gap-2 px-3 py-1 rounded bg-black text-white border border-gray-600 hover:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400 transition"
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="true"
+        aria-expanded={open}
+      >
+        <span className="material-icons text-base">language</span>
+        {selected.label}
+        <svg
+          className={`ml-1 w-3 h-3 transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </button>
+      {open && (
+        <ul className="absolute bottom-10 right-0 mb-2 w-40 bg-black text-white rounded shadow-lg border border-gray-700 z-50 animate-fadeInUp">
+          {languages.map((lang) => (
+            <li key={lang.code}>
+              <button
+                className={`w-full text-left px-4 py-2 hover:bg-gray-800 focus:bg-gray-800 transition ${
+                  selected.code === lang.code ? "bg-gray-900" : ""
+                }`}
+                onClick={() => {
+                  setSelected(lang);
+                  setOpen(false);
+                }}
+              >
+                {lang.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 const socialLinks = [
   { name: "Facebook", href: "https://facebook.com", icon: <FaFacebookF /> },
@@ -98,14 +180,9 @@ export default function Footer() {
             </a>
           ))}
         </div>
-        {/* Bottom right: Language dropdown */}
-        <div className="order-3 w-full sm:w-auto flex justify-center sm:justify-end mt-2 sm:mt-0">
-          <select className="bg-transparent border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-gold-400">
-            <option value="en">English</option>
-            <option value="hi">Hindi</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-          </select>
+        {/* Bottom right: Language dropup */}
+        <div className="order-3 w-full sm:w-auto flex justify-center sm:justify-end mt-2 sm:mt-0 relative">
+          <LanguageDropup />
         </div>
       </div>
     </footer>
