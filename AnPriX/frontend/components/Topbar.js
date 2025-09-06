@@ -181,14 +181,20 @@ export default function Topbar() {
 
       {/* Right: Login only (language selection removed) */}
       <div className="hidden md:flex items-center gap-6 text-sm">
-        <button className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-500/30">
+        <button
+          className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-500/30"
+          onClick={() => (window.location.href = "/login")}
+        >
           Login
         </button>
       </div>
 
       {/* Mobile login button */}
       <div className="md:hidden flex items-center ml-2">
-        <button className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-500/30">
+        <button
+          className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-500/30"
+          onClick={() => (window.location.href = "/login")}
+        >
           Login
         </button>
       </div>
